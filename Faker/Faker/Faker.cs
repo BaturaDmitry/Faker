@@ -20,7 +20,16 @@ namespace Faker
                 { typeof(bool), new BoolGenerator()},
                 { typeof(byte), new ByteGenerator()},
                 { typeof(char), new CharGenerator()},
+                { typeof(DateTime), new DateGenerator()},
+                { typeof(double), new DoubleGenerator()},
+                { typeof(float), new FloatGenerator()},
+                { typeof(int), new IntGenerator()},
+                { typeof(long), new LongGenerator()},
+                { typeof(short), new ShortGenerator()},
+                { typeof(string), new StringGenerator()},
             };
+            PluginLoader loader = new PluginLoader(generators);
+            loader.LoadPluginGenerators();
             circularReferencesEncounter = new List<Type>();
         }
 
@@ -70,7 +79,8 @@ namespace Faker
 
             if (!type.IsArray)
                 return false;
-            
+
+            instance = (new ArrayGenerator(this, type)).Create();
 
             return true;
         }
@@ -80,6 +90,7 @@ namespace Faker
             instance = null;
             if (generators.TryGetValue(type, out IGenerator generator))
             {
+                instance = generator.Create();
                 return true;
             }
 

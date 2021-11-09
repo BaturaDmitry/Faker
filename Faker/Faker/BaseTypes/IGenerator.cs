@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Faker
 {
-    public class IGenerator
+    public interface IGenerator
     {
-        object Create();
-        Type GeneratorType { get; }
+        public object Create();
+        public Type GeneratorType { get; }
     }
 }
