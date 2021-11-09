@@ -8,7 +8,7 @@ namespace Faker
 {
     public interface IGenerator
     {
-        public object Create();
-        public Type GeneratorType { get; }
+        object Create();
+        Type GeneratorType { get; }
     }
 }
