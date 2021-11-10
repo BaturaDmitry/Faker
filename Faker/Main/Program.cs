@@ -17,8 +17,7 @@ namespace Main
             /*Console.WriteLine(JsonConvert.SerializeObject(ff,Formatting.Indented));
             Console.WriteLine(JsonConvert.SerializeObject(cc,Formatting.Indented));*/
             Console.WriteLine(JsonConvert.SerializeObject(ff,Formatting.Indented));
-            //Console.WriteLine(ff.ToString());
-            
+
         }
     }
 }

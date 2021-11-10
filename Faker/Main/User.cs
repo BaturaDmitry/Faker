@@ -28,12 +28,10 @@ namespace Main
    public class Profile
     {
         public string address;
-        
-        public Profile()
+        public Profile(string address)
         {
             this.address = address;
         }
-        
         
     }
 }

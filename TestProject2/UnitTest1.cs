@@ -15,7 +15,7 @@ namespace TestProject1
         private User user;
         private Foo foo;
         [SetUp]
-        public void initialization()
+        public void Initialization()
         {
             faker = new Faker.Faker();
             bar = faker.Create<Bar>();

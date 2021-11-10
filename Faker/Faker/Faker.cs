@@ -12,7 +12,8 @@ namespace Faker
         private readonly List<Type> circularReferencesEncounter;
 
         private Dictionary<Type, IGenerator> generators;
-
+        private List<int> indexOfWrongCnst = new List<int>();
+        private int k = 0;
         public Faker()
         {
             generators = new Dictionary<Type, IGenerator>
@@ -167,18 +168,24 @@ namespace Faker
         private bool TryConstruct(Type type, out object instance)
         {
             instance = null;
-            if (TryGetMaxParamsConstructor(type, out ConstructorInfo ctn))
+            try
             {
-                var prms = GenerateConstructorParams(ctn);
-                
-                instance = ctn.Invoke(prms);
+                if (TryGetMaxParamsConstructor(type, out ConstructorInfo ctn))
+                {
+                    var prms = GenerateConstructorParams(ctn);
 
+                    instance = ctn.Invoke(prms);
                     return true;
+                }
+            }
+            catch
+            {
+                
             }
 
             return false;
         }
-
+        
         private bool TryGetMaxParamsConstructor(Type type, out ConstructorInfo ctn)
         {
             ctn = null;
@@ -188,14 +195,16 @@ namespace Faker
             if (ctns.Length == 0)
                 return false;
 
-            foreach (var locCtn in ctns)
+            for (int i = 0; i < ctns.Length; i++)
             {
-                if (locCtn.IsPublic &&
-                    (ctn == null || locCtn.GetParameters().Length > ctn.GetParameters().Length))
+                if (ctns[i].IsPublic &&
+                    (ctn == null || ctns[i].GetParameters().Length > ctn.GetParameters().Length))
                 {
-                    ctn = locCtn;
-                }
+                    indexOfWrongCnst.Add(i);
+                    ctn = ctns[i];
+                } 
             }
+
 
             if (ctn == null)
                 return false;
