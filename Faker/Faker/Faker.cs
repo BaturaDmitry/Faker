@@ -12,8 +12,6 @@ namespace Faker
         private readonly List<Type> circularReferencesEncounter;
 
         private Dictionary<Type, IGenerator> generators;
-        private List<int> indexOfWrongCnst = new List<int>();
-        private int k = 0;
         public Faker()
         {
             generators = new Dictionary<Type, IGenerator>
@@ -121,14 +119,13 @@ namespace Faker
 
             if (!(type.GetGenericTypeDefinition() == typeof(List<>)))
                 return false;
-
             var innerTypes = type.GetGenericArguments();
             Type gType = innerTypes[0];
             //Console.WriteLine(gType.Name);
             int count = new Random().Next(1,20);
             instance = Activator.CreateInstance(type);
             object[] arr = new object[1];
-            for (int i = 0; i < count; ++i)
+            for (int i = 0; i < count; i++)
             {
                 arr[0] = Create(gType);
                 type.GetMethod("Add").Invoke(instance, arr);
@@ -200,7 +197,6 @@ namespace Faker
                 if (ctns[i].IsPublic &&
                     (ctn == null || ctns[i].GetParameters().Length > ctn.GetParameters().Length))
                 {
-                    indexOfWrongCnst.Add(i);
                     ctn = ctns[i];
                 } 
             }

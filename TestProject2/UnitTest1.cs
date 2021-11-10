@@ -61,13 +61,7 @@ namespace TestProject1
                 Assert.True(num != 0);
             }
         }
-        [Test]
-        public void TestGenerateDateTime()
-        {
-            DateTime dateTime = new DateTime();
-            Assert.False(dateTime.Equals(bar.date));
-        }
-        
+
         [Test]
         public void CollectionCreate()
         {
