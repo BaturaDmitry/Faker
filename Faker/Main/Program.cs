@@ -1,46 +1,24 @@
 ﻿using System;
+using Newtonsoft.Json;
 using Faker;
 using Faker.BaseTypes;
+using System.Collections.Generic;
 
-namespace Faker
+namespace Main
 {
-    class FooBar
-    {
-        public Foo fooInBar;
-        public int FBInt;
-        public float floatFB;
-        public double doubleFB;
-        public long longFB;
-    }
-
-    class Bar
-    {
-        public long longB;
-        public Foo fooB;
-        private readonly int intB;
-        public string stringB;
-
-        public Bar(int longB)
-        {
-            this.longB = longB;
-        }
-
-        public int ValueSome
-        {
-            get { return this.intB; }
-        }
-    }
-    class Foo
-    {
-        public Bar bar;
-    }
     class Program
     {
         static void Main(string[] args)
         {
-            Faker test = new Faker();
-            FooBar test1 = test.Create<FooBar>();
-            Console.WriteLine(test1);
+            Faker.Faker f = new Faker.Faker();
+            User ff = f.Create<User>();
+            Bar cc = f.Create<Bar>();
+            /*ICollection<int> ff = f.Create<List<int>>();*/
+            /*Console.WriteLine(JsonConvert.SerializeObject(ff,Formatting.Indented));
+            Console.WriteLine(JsonConvert.SerializeObject(cc,Formatting.Indented));*/
+            Console.WriteLine(JsonConvert.SerializeObject(ff,Formatting.Indented));
+            //Console.WriteLine(ff.ToString());
+            
         }
     }
 }

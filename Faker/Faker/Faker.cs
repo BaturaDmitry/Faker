@@ -151,7 +151,6 @@ namespace Faker
             }
 
             circularReferencesEncounter.Add(type);
-
             if (TryConstruct(type, out instance))
             {
                 GenerateFillProps(instance, type);
@@ -168,14 +167,13 @@ namespace Faker
         private bool TryConstruct(Type type, out object instance)
         {
             instance = null;
-
             if (TryGetMaxParamsConstructor(type, out ConstructorInfo ctn))
             {
                 var prms = GenerateConstructorParams(ctn);
-
+                
                 instance = ctn.Invoke(prms);
 
-                return true;
+                    return true;
             }
 
             return false;
@@ -236,8 +234,8 @@ namespace Faker
 
         private object[] GenerateConstructorParams(ConstructorInfo constructor)
         {
+            
             var prms = constructor.GetParameters();
-
             object[] generated = new object[prms.Length];
 
             for (int i = 0; i < prms.Length; i++)
