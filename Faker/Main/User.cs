@@ -6,16 +6,16 @@ namespace Main
     {
         public String name;
         public int age;
+        public  Dog[] dogs;
         public long test { get; set; }
         public float money = 10.5f;
-        public  Dog[] dogs;
         public Profile profile;
     }
 
    public class Dog
     {
-        private string name; 
-        private User owner;
+        public string name;
+        public User owner;
         private Dog(string name,User owner)
         {
             this.name = name;
@@ -32,6 +32,11 @@ namespace Main
         {
             this.address = address;
         }
+        public Profile(string address,string hello)
+        {
         
+            this.address = address;
+            throw new Exception();
+        }
     }
 }

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Faker.BaseTypes;
+using Main;
 
 namespace Faker
 {
@@ -12,6 +13,9 @@ namespace Faker
         private readonly List<Type> circularReferencesEncounter;
 
         private Dictionary<Type, IGenerator> generators;
+        private List<ConstructorInfo> list = new List<ConstructorInfo>();
+        private int countOfException;
+        private int constructor = 0;
         public Faker()
         {
             generators = new Dictionary<Type, IGenerator>
@@ -34,6 +38,7 @@ namespace Faker
 
         public T Create<T>()
         {
+            
             return (T)Create(typeof(T));
         }
 
@@ -57,7 +62,10 @@ namespace Faker
                 return instance;
 
             if (TryGenerateCls(type, out instance))
+            {
                 return instance;
+            }
+
 
             return default;
         }
@@ -90,7 +98,7 @@ namespace Faker
             if (generators.TryGetValue(type, out IGenerator generator))
             {
                 instance = generator.Create();
-                return true;
+                return true;                                                                                                                                                                                         
             }
 
             return false;
@@ -155,7 +163,6 @@ namespace Faker
                 GenerateFillFields(instance, type);
 
                 circularReferencesEncounter.Remove(type);
-
                 return true;
             }
 
@@ -164,20 +171,30 @@ namespace Faker
 
         private bool TryConstruct(Type type, out object instance)
         {
+            object[] prms = null;
             instance = null;
             try
             {
                 if (TryGetMaxParamsConstructor(type, out ConstructorInfo ctn))
                 {
-                    var prms = GenerateConstructorParams(ctn);
-
+                    prms = GenerateConstructorParams(ctn);
+                    /*Console.WriteLine(prms.Length);*/
                     instance = ctn.Invoke(prms);
                     return true;
                 }
             }
             catch
             {
-                
+                countOfException++;
+                object[] parameters = new object[countOfException];
+                if (prms != null)
+                    for (int i = 0; i < prms.Length - countOfException; i++)
+                    {
+                        parameters[i] = prms[i];
+                    }
+
+                instance = list[constructor].Invoke(parameters);
+                return true;
             }
 
             return false;
@@ -185,21 +202,25 @@ namespace Faker
         
         private bool TryGetMaxParamsConstructor(Type type, out ConstructorInfo ctn)
         {
+            list.Clear();
             ctn = null;
 
-            var ctns = type.GetConstructors();
-
+            var ctns = type.GetConstructors(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             if (ctns.Length == 0)
                 return false;
 
             for (int i = 0; i < ctns.Length; i++)
             {
-                if (ctns[i].IsPublic &&
-                    (ctn == null || ctns[i].GetParameters().Length > ctn.GetParameters().Length))
-                {
-                    ctn = ctns[i];
-                } 
-            }
+                  
+                    if (
+                        ctn == null || ctns[i].GetParameters().Length > ctn.GetParameters().Length)
+                    {
+              
+                        ctn = ctns[i];
+                        list.Add(ctn);
+                    }
+                }
+            
 
 
             if (ctn == null)
@@ -224,15 +245,17 @@ namespace Faker
             }
         }
 
-        private void GenerateFillFields(object instance, Type type)
+        private void  GenerateFillFields(object instance, Type type)
         {
-            var fields = type.GetFields();
-
+            var fields = type.GetFields( BindingFlags.Instance | BindingFlags.Public);
+            
             foreach (var field in fields)
             {
-                if (!field.IsPublic)
-                    continue;
 
+                if (!field.IsPublic)
+                {
+                    continue;
+                }
                 field.SetValue(instance, Create(field.FieldType));
             }
         }
@@ -245,15 +268,11 @@ namespace Faker
 
             for (int i = 0; i < prms.Length; i++)
             {
+                
                 var p = prms[i];
-
                 generated[i] = Create(p.ParameterType);
             }
-
             return generated;
         }
-
-
-
     }
 }

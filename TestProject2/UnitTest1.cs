@@ -31,17 +31,20 @@ namespace TestProject1
         public void TestGenerateLong()
         {
             Assert.True(bar.Long != 0L);
+            Assert.True(user.money is long);
         }
         [Test]
         public void TestGenerateFloat()
         {
             Assert.True(user.money != 0f);
+            Assert.True(user.money is float);
         }
         
         [Test]
         public void TestGenerateWithoutConstructor()
         {
             Assert.True(bar._int != 0);
+            Assert.True(bar._int is int);
         }
         [Test]
         public void TestGenerateList()
@@ -49,7 +52,7 @@ namespace TestProject1
             Assert.True(user.dogs.Length > 0);
             foreach (Dog dog in user.dogs)
             {
-                Assert.True(dog==null);
+                Assert.True(dog!=null);
             }
         }
         [Test]

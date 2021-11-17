@@ -37,6 +37,7 @@ namespace Faker.BaseTypes
                 var item = faker.Create(elementType);
                 result.SetValue(item, i);
             }
+            
             return result;
         }
     }
