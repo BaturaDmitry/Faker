@@ -8,11 +8,12 @@ namespace Faker
 {
     class BoolGenerator : IGenerator
     {
+        static Random random = new Random();
         public Type GeneratorType => typeof(bool);
 
         public object Create()
         {
-            return new Random().Next(0,2)==1;
+            return random.Next(0,2)==1;
         }
     }
 }

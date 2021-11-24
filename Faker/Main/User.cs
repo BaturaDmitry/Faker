@@ -13,16 +13,15 @@ namespace Main
     }
 
    public class Dog
-    {
+   {
         public string name;
         public User owner;
-        private Dog(string name,User owner)
+        public Dog(string name,User owner)
         {
             this.name = name;
             this.owner = owner;
         }
-
-
+        
     }
 
    public class Profile

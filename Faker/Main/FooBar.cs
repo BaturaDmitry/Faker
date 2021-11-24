@@ -6,7 +6,6 @@ namespace Main
    public class Bar
     {
         public long longBar;
-        public Foo fooBar;
         public bool booleanInv;
         public int _int;
         private readonly int intBar;

@@ -9,10 +9,9 @@ namespace Faker.BaseTypes
     public class StringGenerator : IGenerator
     {
         public Type GeneratorType => typeof(string);
-
+        static Random random = new Random();
         public object Create()
         {
-            Random random = new Random();
             int length = random.Next(byte.MaxValue);
             StringBuilder builder = new StringBuilder();
             CharGenerator chr = new CharGenerator();

@@ -83,12 +83,11 @@ namespace Faker
         private bool TryGenerateArray(Type type, out object instance)
         {
             instance = null;
-
             if (!type.IsArray)
                 return false;
 
             instance = (new ArrayGenerator(this, type)).Create();
-
+            
             return true;
         }
 
@@ -219,7 +218,8 @@ namespace Faker
                         ctn = ctns[i];
                         list.Add(ctn);
                     }
-                }
+                    
+            }
             
 
 
@@ -251,12 +251,8 @@ namespace Faker
             
             foreach (var field in fields)
             {
-
-                if (!field.IsPublic)
-                {
-                    continue;
-                }
-                field.SetValue(instance, Create(field.FieldType));
+                var value = Create(field.FieldType);
+                field.SetValue(instance, value);
             }
         }
 
@@ -266,12 +262,13 @@ namespace Faker
             var prms = constructor.GetParameters();
             object[] generated = new object[prms.Length];
 
+            
             for (int i = 0; i < prms.Length; i++)
             {
-                
                 var p = prms[i];
                 generated[i] = Create(p.ParameterType);
             }
+            
             return generated;
         }
     }

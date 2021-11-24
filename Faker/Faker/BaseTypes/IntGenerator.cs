@@ -9,10 +9,10 @@ namespace Faker.BaseTypes
     public class IntGenerator : IGenerator
     {
         public Type GeneratorType => typeof(int);
-
+        static Random random = new Random();
         public object Create()
         {
-            return new Random().Next(int.MinValue,int.MaxValue);
+            return random.Next(int.MinValue,int.MaxValue);
         }
     }
 }
